@@ -34,7 +34,8 @@ ui <- fluidPage(
         p("Paste this into a cell to get a random number from this distribution"),
         textOutput("excel_formula"),
         h2("Sources"),
-        p("calculation: https://rdrr.io/cran/prevalence/man/betaPERT.html")
+        p("Calculation: https://rdrr.io/cran/prevalence/man/betaPERT.html"),
+        p("Source code: https://github.com/blackfist/beta_maker")
       )
    )
 )
