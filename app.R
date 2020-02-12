@@ -33,9 +33,10 @@ ui <- fluidPage(
         h2("Excel formula"),
         p("Paste this into a cell to get a random number from this distribution"),
         textOutput("excel_formula"),
-        h2("Sources"),
+        h2("References & Source Code"),
         p("Calculation: https://rdrr.io/cran/prevalence/man/betaPERT.html"),
         p("Calculation: https://rdrr.io/github/n8thangreen/treeSimR/src/R/sample_distributions.R"),
+        p("Calculation: https://www.vosesoftware.com/riskwiki/PERTdistribution.php"),
         p("Source code: https://github.com/blackfist/beta_maker")
       )
    )
@@ -59,7 +60,7 @@ server <- function(input, output) {
       return((lambda/2)+1)
     } else {
       return(
-        ((mean-input$pert_min)*(2*input$pert_ml-input$pert_min-input$pert_max))/((input$pert_ml-mean)*(input$pert_max-input$pert_min)) #(mean-input$pert_min)*(2*input$pert_ml-input$pert_min-input$pert_max)/((input$pert_ml-mean)*(input$pert_max-input$pert_min))
+        ((mean-input$pert_min)*(2*input$pert_ml-input$pert_min-input$pert_max))/((input$pert_ml-mean)*(input$pert_max-input$pert_min)) 
       )
     }
   })
