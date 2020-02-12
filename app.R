@@ -35,6 +35,7 @@ ui <- fluidPage(
         textOutput("excel_formula"),
         h2("Sources"),
         p("Calculation: https://rdrr.io/cran/prevalence/man/betaPERT.html"),
+        p("Calculation: https://rdrr.io/github/n8thangreen/treeSimR/src/R/sample_distributions.R"),
         p("Source code: https://github.com/blackfist/beta_maker")
       )
    )
@@ -42,19 +43,25 @@ ui <- fluidPage(
 
 # Define server logic required to draw a histogram
 server <- function(input, output) {
-  confidence <- 4
+  lambda <- 4 # Lambad can be adjusted for confidence
   calculate_mean <- reactive({
-    (input$pert_min + (input$pert_ml * confidence) + input$pert_max)/(confidence +  2)
+    (input$pert_min + (input$pert_ml * lambda) + input$pert_max)/(lambda +  2)
   })
   
   calculate_sd <- reactive({
-    (input$pert_max-input$pert_min)/(confidence+2)
+    (input$pert_max-input$pert_min)/(lambda+2)
   })
   
   calculate_alpha <- reactive({
     mean <- calculate_mean()
     sd <- calculate_sd()
-    (mean-input$pert_min)*(2*input$pert_ml-input$pert_min-input$pert_max)/((input$pert_ml-mean)*(input$pert_max-input$pert_min))
+    if (mean == input$pert_ml) {
+      return((lambda/2)+1)
+    } else {
+      return(
+        ((mean-input$pert_min)*(2*input$pert_ml-input$pert_min-input$pert_max))/((input$pert_ml-mean)*(input$pert_max-input$pert_min)) #(mean-input$pert_min)*(2*input$pert_ml-input$pert_min-input$pert_max)/((input$pert_ml-mean)*(input$pert_max-input$pert_min))
+      )
+    }
   })
   
   calculate_beta <- reactive({
@@ -62,7 +69,7 @@ server <- function(input, output) {
     mean <- calculate_mean()
     max <- input$pert_max
     min <- input$pert_min
-    alpha*(max-mean)/(mean-min)
+   ( alpha*(max-mean))/(mean-min)
   })
   
   
