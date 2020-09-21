@@ -104,7 +104,7 @@ server <- function(input, output) {
      alpha <- calculate_alpha()
      beta <- calculate_beta()
      
-     paste0("=BETA.INV(RAND(),",alpha,",",beta,",",input$pert_min,",",input$pert_max)
+     paste0("=BETA.INV(RAND(),",alpha,",",beta,",",input$pert_min,",",input$pert_max, ")")
    })
 
 }
