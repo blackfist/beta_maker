@@ -6,6 +6,11 @@ library(ggplot2)
 # Define UI for application that draws a histogram
 ui <- fluidPage(
    
+   # Some styling
+   tags$head(
+     tags$style("#long_tail_warning{color: red}")
+   ),
+   
    # Application title
    titlePanel("Beta Parameter getter"),
    
@@ -30,6 +35,7 @@ ui <- fluidPage(
         textOutput("beta"),
         h2("Plot"),
         plotOutput("distPlot"),
+        textOutput("long_tail_warning"),
         h2("Excel formula"),
         p("Paste this into a cell to get a random number from this distribution"),
         textOutput("excel_formula"),
@@ -105,6 +111,20 @@ server <- function(input, output) {
      beta <- calculate_beta()
      
      paste0("=BETA.INV(RAND(),",alpha,",",beta,",",input$pert_min,",",input$pert_max, ")")
+   })
+   
+   output$long_tail_warning <- renderText({
+     # gives a warning if the max value is 2 or more 
+     # orders of magnitude (OOM) larger than the
+     # most likely
+     mlOOM <- round(log10(input$pert_ml))
+     maxOOM <- round(log10(input$pert_max))
+     
+     if (maxOOM > mlOOM+1) {
+       "WARNING: The max value is at least two standard deviations larger than the minimum value. The resulting distribution may produce a mean or mode which is larger than expected. Consider using a lognormal or power law distribution to model this variable"
+     } else {
+       ""
+     }
    })
 
 }
